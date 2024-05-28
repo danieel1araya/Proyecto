@@ -1,1 +1,1 @@
-[{"servicio":null,"contrasena":"10","id":"1","saldo":10022.0,"nombre":"Daniel"},{"servicio":null,"contrasena":"2","id":"2","saldo":0.0,"nombre":"Dario"}]
+[{"servicios":[{"fecha":"2024-05-27","tipoServicio":"Agua","monto":10000.0,"numeroFactura":446}],"contrasena":"10","id":"1","saldo":5000.0,"nombre":"Daniel"},{"servicios":[],"contrasena":"2","id":"2","saldo":0.0,"nombre":"Dario"}]

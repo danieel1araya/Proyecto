@@ -4,11 +4,13 @@
  */
 package Controlador;
 
+import Modelo.RegistroServicio;
 import Modelo.RegistroUsuario;
 import Modelo.Servicio;
 import Modelo.Usuario;
 import Vista.FRMHome;
 import Vista.FRMInformacion;
+import Vista.FRMModificarInformacion;
 import Vista.FRMRegistroUsuario;
 import Vista.FRMSaldo;
 import java.awt.event.ActionEvent;
@@ -19,15 +21,19 @@ public class ManejadorHome implements ActionListener{
     private Usuario usuarioA;
     private Servicio servicio;
     private RegistroUsuario registro;
+    private RegistroServicio registroC;
     private ManejadorServicios manejadorServicios;
     private FRMHome home;
     private FRMSaldo saldo;
     private FRMInformacion frmInfo;
+    private FRMModificarInformacion frmModificar;
     
-    public ManejadorHome(Usuario usuario, RegistroUsuario registroU){
+    public ManejadorHome(Usuario usuario, RegistroUsuario registroU, RegistroServicio registroCC){
         this.usuarioA = usuario;
         this.registro = registroU;
+        this.registroC = registroCC;
         this.frmInfo = new FRMInformacion();
+        this.frmModificar = new FRMModificarInformacion(usuarioA, registro);
         this.home = new FRMHome();
         this.home.setNombre(usuario);
         this.home.setEscuchadores(this);
@@ -38,21 +44,23 @@ public class ManejadorHome implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         switch(e.getActionCommand().toString()){
             case "Pagar servicio":
-                this.manejadorServicios = new ManejadorServicios(usuarioA);
+                this.manejadorServicios = new ManejadorServicios(usuarioA, registro, registroC);
             break;
             case "Agregar saldo":
-               this.saldo = new FRMSaldo(usuarioA, registro);
+               this.saldo = new FRMSaldo(usuarioA, registro, registroC);
                this.saldo.setSaldo();
             break;
-            case "Consultar mis aervicios":
-               
+            case "Consultar mis servicios":
+                this.frmInfo.setDataTable(this.registro.getInfoServicios(usuarioA), Servicio.NOMBRES_SERVICIOS);
+                this.frmInfo.setVisible(true);
             break;
             case "Consultar mi informacion":
                 this.frmInfo.setDataTable(this.registro.getInfo(usuarioA), Usuario.NOMBRES_USUARIO);
                 this.frmInfo.setVisible(true);
             break;
             case "Modificar mi informacion":
-               
+               this.frmModificar.setInformacion(usuarioA);
+               this.frmModificar.setVisible( true);
             break;
             case "Cerrar Sesion":
                 this.home.dispose();

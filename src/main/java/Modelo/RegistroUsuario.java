@@ -28,7 +28,7 @@ public class RegistroUsuario {
             if (buscarUsuario(usuario.getId()) == null) {      
                 this.listaUsuarios.add(usuario);
                 escribirJSON();
-                mensaje = "Usuario agregado";
+                mensaje = "Usuario agregado\nReinicie el programa";
             } else {
                 mensaje = "El usuario ya existe";
             }
@@ -84,20 +84,43 @@ public class RegistroUsuario {
        return matrizInfo;
     }
     
+    public String[][] getInfoServicios(Usuario usuario){
+       ArrayList<Servicio> listaServicios = usuario.getServicios();
+       String[][] matrizInfo = new String[listaServicios.size()][Servicio.NOMBRES_SERVICIOS.length];
+       
+       for(int x = 0; x<matrizInfo.length;x++){
+           matrizInfo[x][0] = listaServicios.get(x).getTipoServicio();
+           matrizInfo[x][1] = ""+listaServicios.get(x).getNumeroFactura();
+           matrizInfo[x][2] = ""+listaServicios.get(x).getMonto();
+           matrizInfo[x][3] = listaServicios.get(x).getFecha();
+       }
+       return matrizInfo;
+    }
+    
     
     public void escribirJSON() {
         JSONArray jsonArray = new JSONArray();
        
-        for (int i = 0; i < listaUsuarios.size(); i++) {
-            JSONObject newObject = new JSONObject();
+        for (Usuario usuario : listaUsuarios) {
+        JSONObject newUserObject = new JSONObject();
+        newUserObject.put("id", usuario.getId());
+        newUserObject.put("nombre", usuario.getNombre());
+        newUserObject.put("contrasena", usuario.getContrasena());
+        newUserObject.put("saldo", usuario.getSaldo());
 
-            newObject.put("id", listaUsuarios.get(i).getId());
-            newObject.put("nombre", listaUsuarios.get(i).getNombre());
-            newObject.put("contrasena", listaUsuarios.get(i).getContrasena());
-            newObject.put("saldo", listaUsuarios.get(i).getSaldo());
-            newObject.put("servicio", listaUsuarios.get(i).getServicio());
-             
-            jsonArray.add(newObject);
+        JSONArray serviciosArray = new JSONArray();
+        for (Servicio servicio : usuario.getServicios()) {
+            JSONObject servicioObject = new JSONObject();
+            servicioObject.put("tipoServicio", servicio.getTipoServicio());
+            servicioObject.put("numeroFactura", servicio.getNumeroFactura());
+            servicioObject.put("monto", servicio.getMonto());
+            servicioObject.put("fecha", servicio.getFecha());
+            serviciosArray.add(servicioObject);
+        }
+        newUserObject.put("servicios", serviciosArray);
+
+        jsonArray.add(newUserObject);
+    }
 
             try (FileWriter file = new FileWriter(ruta)) {
                 file.write(jsonArray.toJSONString());
@@ -105,33 +128,47 @@ public class RegistroUsuario {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        
     }
 
-    public ArrayList<Usuario> leerJSON() {
-        ArrayList<Usuario> listaU = new ArrayList<>();
-        JSONParser parser = new JSONParser();
+  public ArrayList<Usuario> leerJSON() {
+    ArrayList<Usuario> listaU = new ArrayList<>();
+    JSONParser parser = new JSONParser();
 
-        try (FileReader reader = new FileReader(ruta)) {
-            Object obj = parser.parse(reader);
-            JSONArray jsonArray = (JSONArray) obj;
+    try (FileReader reader = new FileReader(ruta)) {
+        Object obj = parser.parse(reader);
+        JSONArray jsonArray = (JSONArray) obj;
 
-            for (Object object : jsonArray) {
-                JSONObject jsonObject = (JSONObject) object;
-                String id = (String) jsonObject.get("id");
-                String nombre = (String) jsonObject.get("nombre");
-                String contrasena = (String) jsonObject.get("contrasena");
-                double saldo = (Double) jsonObject.get("saldo");
-                Servicio servicio = (Servicio) jsonObject.get("servicio");
-                
-                Usuario usuario = new Usuario(id,nombre,contrasena,saldo,servicio);
-                listaU.add(usuario);
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
+            String id = (String) jsonObject.get("id");
+            String nombre = (String) jsonObject.get("nombre");
+            String contrasena = (String) jsonObject.get("contrasena");
+            double saldo = (Double) jsonObject.get("saldo");
+
+            JSONArray serviciosArray = (JSONArray) jsonObject.get("servicios");
+            ArrayList<Servicio> servicios = new ArrayList<>();
+            if (serviciosArray != null) {
+                for (Object servObj : serviciosArray) {
+                    JSONObject servicioObject = (JSONObject) servObj;
+                    String tipoServicio = (String) servicioObject.get("tipoServicio");
+                    int numeroFactura = ((Long) servicioObject.get("numeroFactura")).intValue();
+                    double monto = (Double) servicioObject.get("monto");
+                    String fecha = (String) servicioObject.get("fecha");
+                    Servicio servicio = new Servicio(tipoServicio, numeroFactura, monto, fecha);
+                    servicios.add(servicio);
+                }
             }
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
 
-        return listaU;
+            Usuario usuario = new Usuario(id, nombre, contrasena, saldo);
+            usuario.getServicios().addAll(servicios);
+            listaU.add(usuario);
+        }
+    } catch (IOException | ParseException e) {
+        e.printStackTrace();
     }
+
+    return listaU;
+}
     
 }

@@ -16,12 +16,17 @@ public class Servicio {
     private double monto;
     @CsvBindByName
     private String fecha;
+    
+    public static final String[] NOMBRES_SERVICIOS ={"Tipo Servicio","Numero Factura", "Monto", "Fecha"};
 
     public Servicio(String tipoServicio, int numeroFactura, double monto, String fecha) {
         this.tipoServicio = tipoServicio;
         this.numeroFactura = numeroFactura;
         this.monto = monto;
         this.fecha = fecha;
+    }
+
+    public Servicio() {
     }
 
     public String getTipoServicio() {

@@ -29,10 +29,10 @@ public class ManejadorServicios implements ActionListener{
     private int monto = 0;
     private Usuario usuarioI;
 
-    public ManejadorServicios(Usuario usuario) {
+    public ManejadorServicios(Usuario usuario,  RegistroUsuario registro, RegistroServicio registroC) {
         this.usuarioI = usuario;
-        this.registro = new RegistroServicio();
-        this.registroU = new RegistroUsuario();
+        this.registro = registroC;
+        this.registroU = registro;
         this.frmServicio = new FRMRegistroServicios();
         this.frmServicio.setEscuchadores(this);
         this.frmServicio.inicializarCampos();
@@ -48,10 +48,10 @@ public class ManejadorServicios implements ActionListener{
                        try {
                          this.frmServicio.mensaje(this.registro.agregarServicio(servicio));
                          usuarioI.setSaldo(usuarioI.getSaldo()-this.frmServicio.getMonto());
-                         usuarioI.setServicio(servicio);
+                         usuarioI.addServicio(servicio);
                          this.registroU.editarUsuario(usuarioI);
                          this.frmServicio.dispose();
-                         this.manejador = new ManejadorHome(usuarioI,registroU);
+                         this.manejador = new ManejadorHome(usuarioI,registroU, registro);
                         } catch (IOException ex) {
                             Logger.getLogger(ManejadorServicios.class.getName()).log(Level.SEVERE, null, ex);
                         }

@@ -4,30 +4,27 @@
  */
 package Modelo;
 
+import java.util.ArrayList;
+
+
 
 public class Usuario {
     private String id;
     private String nombre;
     private String contrasena;
     private Double saldo;
-    private Servicio servicio;
+    private ArrayList<Servicio> servicios = new ArrayList<>();
     
     public static final String[] NOMBRES_USUARIO ={"ID","Nombre", "Contraseña", "Saldo"};
-
-    public Usuario(String id, String nombre, String contrasena, Double saldo, Servicio servicio) {
-        this.id = id;
-        this.nombre = nombre;
-        this.contrasena = contrasena;
-        this.saldo = saldo;
-        this.servicio = servicio;
-    }
 
     public Usuario(String id, String nombre, String contrasena, Double saldo) {
         this.id = id;
         this.nombre = nombre;
         this.contrasena = contrasena;
         this.saldo = saldo;
+        this.servicios = this.getServicios();
     }
+
 
     public String getId() {
         return id;
@@ -61,12 +58,12 @@ public class Usuario {
         this.saldo = saldo;
     }
 
-    public Servicio getServicio() {
-        return servicio;
+    public ArrayList<Servicio> getServicios() {
+        return servicios;
     }
 
-    public void setServicio(Servicio servicio) {
-        this.servicio = servicio;
+    public void addServicio(Servicio servicio) {
+        this.servicios.add(servicio);
     }
 
     @Override

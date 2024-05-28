@@ -5,6 +5,7 @@
 package Vista;
 
 import Controlador.ManejadorHome;
+import Modelo.RegistroServicio;
 import Modelo.RegistroUsuario;
 import Modelo.Usuario;
 import javax.swing.JOptionPane;
@@ -17,11 +18,13 @@ public class FRMSaldo extends javax.swing.JFrame {
 
    private RegistroUsuario registro;
    private Usuario usuarioI;
+   private RegistroServicio registroCC;
   
    
-    public FRMSaldo(Usuario usuario, RegistroUsuario registroU) {
+    public FRMSaldo(Usuario usuario, RegistroUsuario registroU, RegistroServicio registroC) {
         this.usuarioI = usuario;
         this.registro = registroU;
+        this.registroCC = registroC;
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -119,7 +122,7 @@ public class FRMSaldo extends javax.swing.JFrame {
         this.registro.editarUsuario(usuarioI);
         JOptionPane.showMessageDialog(null,"Saldo agregado correctamente");
         this.jLabel3.setText(""+usuarioI.getSaldo());
-        ManejadorHome manejador = new ManejadorHome(usuarioI, registro);
+        ManejadorHome manejador = new ManejadorHome(usuarioI, registro, registroCC);
     }//GEN-LAST:event_btDepositarActionPerformed
 
     private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed

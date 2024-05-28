@@ -4,6 +4,7 @@
  */
 package Controlador;
 
+import Modelo.RegistroServicio;
 import Modelo.RegistroUsuario;
 import Modelo.Usuario;
 import Vista.FRMHome;
@@ -18,10 +19,12 @@ public class ManejadorMenu implements ActionListener{
     private FRMHome frmHome;
     private ManejadorHome manejador;
     private RegistroUsuario registro;
+    private RegistroServicio registroS;
     private Usuario usuario;
     
     public ManejadorMenu(){
         this.registro = new RegistroUsuario();
+        this.registroS = new RegistroServicio();
         this.frmRegistrarse = new FRMRegistrarse();
         this.frmHome = new FRMHome();
         this.login = new FRMLogin();
@@ -39,7 +42,7 @@ public class ManejadorMenu implements ActionListener{
                    if(this.registro.buscarUsuario(this.login.getID())!=null){
                        usuario = this.registro.buscarUsuario(this.login.getID());
                        if(this.registro.verificarContrasena(this.login.getContrasena())){
-                           this.manejador = new ManejadorHome(usuario,registro);
+                           this.manejador = new ManejadorHome(usuario,registro, registroS);
                            this.login.limpiar();
                        } else {
                             this.login.mensaje("Contrasena incorrecta");
