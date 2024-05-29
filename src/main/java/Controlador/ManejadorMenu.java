@@ -44,6 +44,7 @@ public class ManejadorMenu implements ActionListener{
                        if(this.registro.verificarContrasena(this.login.getContrasena())){
                            this.manejador = new ManejadorHome(usuario,registro, registroS);
                            this.login.limpiar();
+                           this.login.dispose();
                        } else {
                             this.login.mensaje("Contrasena incorrecta");
                        }

@@ -23,6 +23,7 @@ public class ManejadorHome implements ActionListener{
     private RegistroUsuario registro;
     private RegistroServicio registroC;
     private ManejadorServicios manejadorServicios;
+    private ManejadorMenu login;
     private FRMHome home;
     private FRMSaldo saldo;
     private FRMInformacion frmInfo;
@@ -45,9 +46,11 @@ public class ManejadorHome implements ActionListener{
         switch(e.getActionCommand().toString()){
             case "Pagar servicio":
                 this.manejadorServicios = new ManejadorServicios(usuarioA, registro, registroC);
+                this.home.dispose();
             break;
             case "Agregar saldo":
                this.saldo = new FRMSaldo(usuarioA, registro, registroC);
+               this.home.dispose();
                this.saldo.setSaldo();
             break;
             case "Consultar mis servicios":
@@ -64,6 +67,7 @@ public class ManejadorHome implements ActionListener{
             break;
             case "Cerrar Sesion":
                 this.home.dispose();
+                this.login = new ManejadorMenu();
             break;
         }
     }

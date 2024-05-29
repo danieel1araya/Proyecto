@@ -60,6 +60,10 @@ public class ManejadorServicios implements ActionListener{
                      this.frmServicio.dispose();
                  }
             break;
+            case "Regresar":
+                 this.frmServicio.dispose();
+                 this.manejador = new ManejadorHome(usuarioI,registroU, registro);
+            break;
             case "comboBoxChanged":
                 switch(frmServicio.getSelectedItem()){
                     case "Electricidad":

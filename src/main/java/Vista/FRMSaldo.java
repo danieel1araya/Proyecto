@@ -127,6 +127,7 @@ public class FRMSaldo extends javax.swing.JFrame {
 
     private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
         this.dispose();
+        ManejadorHome manejador = new ManejadorHome(usuarioI, registro, registroCC);
     }//GEN-LAST:event_btSalirActionPerformed
 
     /**
